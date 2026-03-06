@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geri Bildirim Formu</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; padding: 50px; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { margin-top: 0; color: #333; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; }
+        textarea, input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; margin-top: 20px; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .stars { display: flex; gap: 5px; cursor: pointer; font-size: 25px; color: #ccc; }
+        .stars span.active { color: #ffbc00; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Geri Bildirim</h2>
+    <p>Deneyiminizi bizimle paylaşın.</p>
+    
+    <label>Puanınız:</label>
+    <div class="stars" id="star-rating">
+        <span data-value="1">★</span><span data-value="2">★</span><span data-value="3">★</span><span data-value="4">★</span><span data-value="5">★</span>
+    </div>
+
+    <label for="comment">Mesajınız:</label>
+    <textarea id="comment" rows="4" placeholder="Nasıl daha iyi olabiliriz?"></textarea>
+
+    <button onclick="sendFeedback()">Gönder</button>
+</div>
+
+<script>
+    let selectedRating = 0;
+    const stars = document.querySelectorAll('#star-rating span');
+
+    // Yıldız seçme mantığı
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            selectedRating = star.getAttribute('data-value');
+            stars.forEach(s => s.classList.remove('active'));
+            for(let i=0; i<selectedRating; i++) stars[i].classList.add('active');
+        });
+    });
+
+    function sendFeedback() {
+        const comment = document.getElementById('comment').value;
+        
+        if(selectedRating === 0) {
+            alert("Lütfen bir puan seçin!");
+            return;
+        }
+
+        // Burada veriyi bir sunucuya gönderebilirsiniz. 
+        // Şimdilik sadece simüle ediyoruz:
+        const data = {
+            rating: selectedRating,
+            message: comment,
+            date: new Date().toISOString()
+        };
+
+        console.log("Geri bildirim alındı:", data);
+        alert("Teşekkürler! Geri bildiriminiz başarıyla alındı.");
+        
+        // Formu temizle
+        document.getElementById('comment').value = "";
+        stars.forEach(s => s.classList.remove('active'));
+    }
+</script>
+
+</body>
+</html>
